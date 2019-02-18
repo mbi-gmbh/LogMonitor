@@ -146,16 +146,24 @@ namespace LogMonitor
 
         private void OnObjectChanged(IList<FileSystemEventArgs> eventList)
         {
-            if (eventList.Count == 0)
-                return;
-
-            foreach (var fileEvent in eventList.GroupBy(l => l.FullPath))
+            try
             {
-                // in the mean time there might have been a 'deleted' or 'renamed' event
-                if (!File.Exists(fileEvent.Key))
-                    continue;
+                if (eventList.Count == 0)
+                    return;
 
-                this.OnObjectChanged(this.watcher, fileEvent.Last());
+                foreach (var fileEvent in eventList.GroupBy(l => l.FullPath))
+                {
+                    // in the mean time there might have been a 'deleted' or 'renamed' event
+                    if (!File.Exists(fileEvent.Key))
+                        continue;
+
+                    this.OnObjectChanged(this.watcher, fileEvent.Last());
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Error in FileNotificationService OnObjectChanged: " + ex);
+                throw;
             }
         }
 
