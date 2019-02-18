@@ -30,7 +30,7 @@ namespace LogMonitor.Output
 
             if (!matchedTargets.Any())
             {
-                Trace.TraceWarning("Not output conifguration matches the file \"{0}\".", change.File);
+                Trace.TraceWarning("Not output configuration matches the file \"{0}\".", change.File);
 
                 return;
             }
