@@ -132,11 +132,18 @@ namespace LogMonitor
 
         private bool SizeChanged(FileInfo file)
         {
-            long position = this.states.GetPosition(file.FullName);
+            try
+            {
+                long position = this.states.GetPosition(file.FullName);
 
-            file.Refresh();
+                file.Refresh();
 
-            return file.Length != position;
+                return file.Length != position;
+            }
+            catch (IOException)
+            {
+                return true;
+            }
         }
 
         private void OnObjectRenamed(object sender, RenamedEventArgs e)
